@@ -29,7 +29,15 @@
     {% endif %}
 
     <h2 class="archive__item-title" itemprop="headline">
-      {% if post.link %}
+      {% if post.collection == 'publications' and post.external_url %}
+        {% if post.external_url contains '://' %}
+          <a href="{{ post.external_url }}">{{ title }}</a>
+        {% else %}
+          <a href="{{ post.external_url | relative_url }}">{{ title }}</a>
+        {% endif %}
+      {% elsif post.collection == 'publications' %}
+        {{ title }}
+      {% elsif post.link %}
         <a href="https://+{{ post.url }}">{{ title }}</a> <a href="{{post.url}}"><i class="fa fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
       {% else %}
         <a href="https://{{ post.url}}">{{ title }}</a>
@@ -44,7 +52,9 @@
           <p> {{ post.type }}, <i>{{ post.venue }}</i>, {{ post.date | default: "1900-01-01" | date: "%Y" }} </p>
         {% elsif post.collection == 'publications' %}
         {% assign pub_date = post.date | date: "%Y-%m-%d" %}
-        {% if pub_date < today_date %}
+        {% if post.status %}
+          <p>{{ post.status }}</p>
+        {% elsif pub_date < today_date %}
           <p>Published in <i>{{ post.venue }}</i>  </p>
 
         {% elsif pub_date > today_date %}

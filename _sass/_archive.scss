@@ -84,6 +84,11 @@
   }
 }
 
+// A publication without a paper URL should not look clickable on hover.
+.archive__item--no-title-hover:hover .archive__item-title {
+  text-decoration: none;
+}
+
 
 /*
    List view

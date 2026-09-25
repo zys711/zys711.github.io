@@ -10,12 +10,21 @@ author_profile: true
 {% endif %} -->
 
 {% include base_path %}
+{% assign ordered_publications = site.publications | sort: 'display_order' %}
 
 <!-- New style rendering if publication categories are defined -->
 {% if site.publication_category %}
   {% for category in site.publication_category  %}
     {% assign title_shown = false %}
-    {% for post in site.publications reversed %}
+    {% if category[0] == 'coauthor' %}
+      <h2>{{ category[1].title }}</h2><hr />
+      {% assign title_shown = true %}
+      <div class="list__item"><article class="archive__item archive__item--no-title-hover" itemscope itemtype="http://schema.org/CreativeWork">
+        <h2 class="archive__item-title" itemprop="headline">Querying Sound Effects by Vocal Imitation: Results of the 2025 Challenge <a href="https://qvim-aes.github.io/">Project</a></h2>
+        <p>Accepted to the Journal of the Audio Engineering Society, 2026</p>
+      </article></div>
+    {% endif %}
+    {% for post in ordered_publications %}
       {% if post.category != category[0] %}
         {% continue %}
       {% endif %}
@@ -27,7 +36,7 @@ author_profile: true
     {% endfor %}
   {% endfor %}
 {% else %}
-  {% for post in site.publications reversed %}
+  {% for post in ordered_publications %}
     {% include archive-single.html %}
   {% endfor %}
 {% endif %}
